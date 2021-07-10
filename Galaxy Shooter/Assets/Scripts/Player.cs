@@ -3,7 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float speed = 5.0f;
-    private float negativePositionX = -PositionsConst.WrapsPositionX;
+    private readonly float negativePositionX = -PositionsConst.WrapsPositionX;
 
     // Start is called before the first frame update
     void Start()
