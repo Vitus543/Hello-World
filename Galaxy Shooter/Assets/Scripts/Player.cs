@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 5.0f;
+    [SerializeField]
+    private float speed = 5.0f;
+    [SerializeField]
     private readonly float negativePositionX = -PositionsConst.WrapsPositionX;
 
     // Start is called before the first frame update
@@ -13,6 +15,12 @@ public class Player : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        Movement();
+    }
+
+    #region Movement
+    private void Movement()
     {
         float horizontalInput = Input.GetAxis(GeneralSettings.HorizontalInput);
         float verticalInput = Input.GetAxis(GeneralSettings.VerticalInput);
@@ -50,4 +58,5 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(PositionsConst.WrapsPositionX, transform.position.y, 0);
         }
     }
+    #endregion
 }
