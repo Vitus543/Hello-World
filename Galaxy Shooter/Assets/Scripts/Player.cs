@@ -17,13 +17,13 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis(GeneralSettings.HorizontalInput);
         float verticalInput = Input.GetAxis(GeneralSettings.VerticalInput);
 
-        transformTranslate(horizontalInput, Vector3.right);
-        transformTranslate(verticalInput, Vector3.up);
+        TransformTranslate(horizontalInput, Vector3.right);
+        TransformTranslate(verticalInput, Vector3.up);
 
         CheckPostion();
     }
 
-    private void transformTranslate(float Input, Vector3 vector3)
+    private void TransformTranslate(float Input, Vector3 vector3)
     {
         transform.Translate(vector3 * speed * Input * Time.deltaTime);
     }

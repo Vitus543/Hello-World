@@ -6,7 +6,6 @@ public class GeneralSettings
     public const string VerticalInput = "Vertical";
 
 }
-
 public class PositionsConst
 {
 
