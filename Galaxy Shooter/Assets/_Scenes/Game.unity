@@ -236,8 +236,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9a280ef8867e4a449609637c0b8c4de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  CanTripleShoot: 0
   laserPrefab: {fileID: 821392618444965974, guid: 84dbcacb99758e5478895d058de4b655, type: 3}
+  TripleShotPrefab: {fileID: 2529571709572868370, guid: d0f5fd8f863809b47900ab278bad9c0e, type: 3}
+  fireRate: 0.25
+  speed: 5
 --- !u!212 &648548475
 SpriteRenderer:
   m_ObjectHideFlags: 0

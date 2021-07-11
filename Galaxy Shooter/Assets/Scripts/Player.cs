@@ -3,8 +3,14 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 
+    public bool CanTripleShoot = false;
+
     [SerializeField]
     private GameObject laserPrefab;
+
+    //Power Ups
+    [SerializeField]
+    private GameObject TripleShotPrefab;
 
     [SerializeField]
     private float fireRate = 0.25f;
@@ -13,9 +19,6 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private float speed = 5.0f;
-
-    [SerializeField]
-    private readonly float negativePositionX = -ShipPositionsConst.WrapsPositionX;
 
     // Start is called before the first frame update
     void Start()
@@ -43,10 +46,6 @@ public class Player : MonoBehaviour
         CheckPostion();
     }
 
-    private void TransformTranslate(float Input, Vector3 vector3)
-    {
-        transform.Translate(vector3 * speed * Input * Time.deltaTime);
-    }
 
     private void CheckPostion()
     {
@@ -55,17 +54,17 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, 0, 0);
         }
-        else if (transform.position.y < ShipPositionsConst.limitPositionY)
+        else if (transform.position.y < ShipPositionsConst.LimitPositionY)
         {
-            transform.position = new Vector3(transform.position.x, ShipPositionsConst.limitPositionY, 0);
+            transform.position = new Vector3(transform.position.x, ShipPositionsConst.LimitPositionY, 0);
         }
 
         //Position wraps X left to right and vice versa
         if (transform.position.x > ShipPositionsConst.WrapsPositionX)
         {
-            transform.position = new Vector3(negativePositionX, transform.position.y, 0);
+            transform.position = new Vector3(-ShipPositionsConst.WrapsPositionX, transform.position.y, 0);
         }
-        else if (transform.position.x < negativePositionX)
+        else if (transform.position.x < -ShipPositionsConst.WrapsPositionX)
         {
             transform.position = new Vector3(ShipPositionsConst.WrapsPositionX, transform.position.y, 0);
         }
@@ -78,10 +77,28 @@ public class Player : MonoBehaviour
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
-            Vector3 position = transform.position + new Vector3(0, 0.88f, 0);
-            Instantiate(laserPrefab, position, Quaternion.identity);
-            //// Instantiate(projectile, transform.position, transform.rotation);
+            if (CanTripleShoot)
+            {
+                Instantiate(TripleShotPrefab, getPostion(transform.position), Quaternion.identity);
+            }
+            else
+            {
+
+                Instantiate(laserPrefab, getPostion(transform.position, y: LaserPositionConst.ShootDefaultPosY), Quaternion.identity);
+            }
         }
+    }
+    #endregion
+
+    #region Helpers
+    private void TransformTranslate(float Input, Vector3 vector3)
+    {
+        transform.Translate(vector3 * speed * Input * Time.deltaTime);
+    }
+
+    private Vector3 getPostion(Vector3 position, float x = 0, float y = 0, float z = 0)
+    {
+        return position + new Vector3(x, y, z);
     }
     #endregion
 }
