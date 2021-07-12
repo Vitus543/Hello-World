@@ -40,6 +40,14 @@ public class PowerUpsConst
     public const float SpeedMultiplier = 2.5f;
 }
 
+public class EnemyConst
+{
+    public const float DefaultSpeedEnemy = 6.0f;
+
+    public const float LimitPositionY = 6.22f;
+
+    public const float LimitPositionX = 7.20f;
+}
 public enum PowerUps
 {
     TripleShots,
