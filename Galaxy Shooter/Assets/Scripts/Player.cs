@@ -3,11 +3,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
-    public bool CanTripleShoot = false;
-
     [SerializeField]
-    private bool UseMouse = true;
+    private bool UseMouse = false;
 
     [SerializeField]
     private GameObject laserPrefab;
@@ -22,7 +19,12 @@ public class Player : MonoBehaviour
     private float nextFire = 0.0f;
 
     [SerializeField]
-    private float speed = 5.0f;
+    private float speed = ShipConst.DefaultShipSpeed;
+
+    private bool UseTripleShotsPowerUp = false;
+    private bool UseSpeedPowerUp = false;
+    private bool UseShieldPowerUp = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -56,7 +58,6 @@ public class Player : MonoBehaviour
         CheckPostion();
     }
 
-
     private void CheckPostion()
     {
         // limits position Y
@@ -64,33 +65,33 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, 0, 0);
         }
-        else if (transform.position.y < ShipPositionsConst.LimitPositionY)
+        else if (transform.position.y < ShipConst.LimitPositionY)
         {
-            transform.position = new Vector3(transform.position.x, ShipPositionsConst.LimitPositionY, 0);
+            transform.position = new Vector3(transform.position.x, ShipConst.LimitPositionY, 0);
         }
 
         if (UseMouse)
         {
             // limits position X
-            if (transform.position.x > ShipPositionsConst.LimitPositionX)
+            if (transform.position.x > ShipConst.LimitPositionX)
             {
-                transform.position = new Vector3(ShipPositionsConst.LimitPositionX, transform.position.y, 0);
+                transform.position = new Vector3(ShipConst.LimitPositionX, transform.position.y, 0);
             }
-            else if (transform.position.x < -ShipPositionsConst.LimitPositionX)
+            else if (transform.position.x < -ShipConst.LimitPositionX)
             {
-                transform.position = new Vector3(-ShipPositionsConst.LimitPositionX, transform.position.y, 0);
+                transform.position = new Vector3(-ShipConst.LimitPositionX, transform.position.y, 0);
             }
         }
         else
         {
             //Position wraps X left to right and vice versa
-            if (transform.position.x > ShipPositionsConst.WrapsPositionX)
+            if (transform.position.x > ShipConst.WrapsPositionX)
             {
-                transform.position = new Vector3(-ShipPositionsConst.WrapsPositionX, transform.position.y, 0);
+                transform.position = new Vector3(-ShipConst.WrapsPositionX, transform.position.y, 0);
             }
-            else if (transform.position.x < -ShipPositionsConst.WrapsPositionX)
+            else if (transform.position.x < -ShipConst.WrapsPositionX)
             {
-                transform.position = new Vector3(ShipPositionsConst.WrapsPositionX, transform.position.y, 0);
+                transform.position = new Vector3(ShipConst.WrapsPositionX, transform.position.y, 0);
             }
         }
     }
@@ -98,14 +99,21 @@ public class Player : MonoBehaviour
 
     #region Shooting
 
-    public void PowerUpOn(string tagPowerUp)
+    public void PowerUpOn(PowerUps powerUpId)
     {
-        switch (tagPowerUp)
+        switch (powerUpId)
         {
-            case "TripleShot_PowerUp":
-                CanTripleShoot = true;
-                StartCoroutine(TripleShotPowerDownRoutine());
+            case PowerUps.TripleShots:
+                UseTripleShotsPowerUp = true;
+                StartCoroutine(PowerDownRoutine(PowerUpsConst.TripleShotsTimeEnd, PowerUps.TripleShots));
                 break;
+            case PowerUps.Speed:
+                UseSpeedPowerUp = true;
+                StartCoroutine(PowerDownRoutine(PowerUpsConst.SpeedTimeEnd, PowerUps.Speed));
+                break;
+            case PowerUps.Shield:
+                break;
+
         }
     }
     private void Shooting()
@@ -115,7 +123,7 @@ public class Player : MonoBehaviour
             if (Time.time > nextFire)
             {
                 nextFire = Time.time + fireRate;
-                if (CanTripleShoot)
+                if (UseTripleShotsPowerUp)
                 {
                     Instantiate(TripleShotPrefab, getPostion(transform.position), Quaternion.identity);
                 }
@@ -130,16 +138,35 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Helpers
-    IEnumerator TripleShotPowerDownRoutine()
+    IEnumerator PowerDownRoutine(float time, PowerUps powerUpId)
     {
-        yield return new WaitForSeconds(PowerUpsConst.TripleShotsTimeEnd);
+        yield return new WaitForSeconds(time);
 
-        CanTripleShoot = false;
+        switch (powerUpId)
+        {
+            case PowerUps.TripleShots:
+                UseTripleShotsPowerUp = false;
+                break;
+            case PowerUps.Speed:
+                UseSpeedPowerUp = false;
+                break;
+            case PowerUps.Shield:
+                UseShieldPowerUp = false;
+                break;
+
+        }
     }
 
     private void TransformTranslate(Vector3 vector3, float Input)
     {
-
+        if (UseSpeedPowerUp)
+        {
+            speed = ShipConst.DefaultShipSpeed * PowerUpsConst.SpeedMultiplier;
+        }
+        else
+        {
+            speed = ShipConst.DefaultShipSpeed;
+        }
         transform.Translate(vector3 * speed * Input * Time.deltaTime);
     }
 

@@ -7,6 +7,9 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private float Speed = 3.0f;
 
+    [SerializeField]
+    private PowerUps PowerUpID;
+
     // Update is called once per frame
     void Update()
     {
@@ -15,12 +18,12 @@ public class PowerUp : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.CompareTag("Player"))
         {
             Player shipPlayer = collision.GetComponent<Player>();
             if (shipPlayer != null)
             {
-                shipPlayer.PowerUpOn(this.tag);
+                shipPlayer.PowerUpOn(PowerUpID);
             }
 
             Destroy(this.gameObject);
