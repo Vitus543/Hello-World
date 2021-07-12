@@ -9,9 +9,6 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject laserPrefab;
 
-    //Power Ups
-    [SerializeField]
-    private GameObject TripleShotPrefab;
 
     [SerializeField]
     private float fireRate = 0.25f;
@@ -19,10 +16,24 @@ public class Player : MonoBehaviour
     private float nextFire = 0.0f;
 
     [SerializeField]
+    private int Lifes = ShipConst.DefaultLifes;
+
+    [SerializeField]
     private float speed = ShipConst.DefaultShipSpeed;
 
+    [SerializeField]
+    private GameObject explosionPrefab;
+
+    //Power Ups
+    [SerializeField]
+    private GameObject TripleShotPrefab;
+    [SerializeField]
+    private GameObject ShieldPrefab;
+    [SerializeField]
     private bool UseTripleShotsPowerUp = false;
+    [SerializeField]
     private bool UseSpeedPowerUp = false;
+    [SerializeField]
     private bool UseShieldPowerUp = false;
 
 
@@ -112,10 +123,31 @@ public class Player : MonoBehaviour
                 StartCoroutine(PowerDownRoutine(PowerUpsConst.SpeedTimeEnd, PowerUps.Speed));
                 break;
             case PowerUps.Shield:
+                UseShieldPowerUp = true;
+                StartCoroutine(PowerDownRoutine(PowerUpsConst.ShieldTimeEnd, PowerUps.Shield));
                 break;
-
         }
     }
+
+    public void Damage()
+    {
+        if (!UseShieldPowerUp)
+        {
+            Lifes -= EnemyConst.DamageEnemyShip;
+        }
+        if (Lifes < ShipConst.DefaultLifes)
+        {
+            Instantiate(ShieldPrefab, getPostion(transform.position), Quaternion.identity);
+            PowerUpOn(PowerUps.Shield);
+        }
+        else if (Lifes < 0)
+        {
+            //Animation explosion KATSU
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+        }
+    }
+    
     private void Shooting()
     {
         if (!UseMouse && Input.GetKeyDown(KeyCode.Space) || UseMouse && Input.GetMouseButtonDown(0))
@@ -167,6 +199,10 @@ public class Player : MonoBehaviour
         {
             speed = ShipConst.DefaultShipSpeed;
         }
+        if (UseShieldPowerUp) 
+        {
+           
+        }
         transform.Translate(vector3 * speed * Input * Time.deltaTime);
     }
 
@@ -174,7 +210,6 @@ public class Player : MonoBehaviour
     {
         return position + new Vector3(x, y, z);
     }
-
 
     #endregion
 }

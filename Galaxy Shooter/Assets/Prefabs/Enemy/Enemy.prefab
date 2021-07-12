@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 122929379399361014}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,3 +122,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa37a1e5f13cc204a9cca25f0e090d36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomX: 0
+  explosionClip: {fileID: 7400000, guid: 3fbb95eb6198f0d4ea0d63824285e304, type: 2}
+  enemyExplosionPrefab: {fileID: 2276815923677019208, guid: d8d22ef2fc1ee78428729db9c5d21344, type: 3}

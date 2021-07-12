@@ -10,6 +10,8 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     private float randomX = 0f;
 
+    public GameObject enemyExplosionPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,12 +21,8 @@ public class EnemyAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         //move down
         transform.Translate(Vector3.down * Speed * Time.deltaTime);
-
-        // when off the screen on the bottom         
-        // respawn back on top with a new x position between the bounds of the screen
 
         if (transform.position.y < -EnemyConst.LimitPositionY)
         {
@@ -32,6 +30,33 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            Player shipPlayer = collision.GetComponent<Player>();
+            if (shipPlayer != null)
+            {
+                shipPlayer.Damage();
+            }
+        }
+        else if (collision.CompareTag("Shot"))
+        {
+            if (collision.transform.parent != null)
+            {
+                Destroy(collision.transform.parent.gameObject);
+            }
+            else
+            {
+                Destroy(collision.gameObject);
+            }
+        }
+
+        //Animation explosion
+        Instantiate(enemyExplosionPrefab, transform.position, Quaternion.identity);
+        
+        Destroy(this.gameObject);
+    }
     #region helpers
 
     private Vector3 RandomPositionX()
