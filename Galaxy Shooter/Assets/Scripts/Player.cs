@@ -1,9 +1,13 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
 
     public bool CanTripleShoot = false;
+
+    [SerializeField]
+    private bool UseMouse = true;
 
     [SerializeField]
     private GameObject laserPrefab;
@@ -40,8 +44,14 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis(ShipMovementInputsConst.HorizontalInput);
         float verticalInput = Input.GetAxis(ShipMovementInputsConst.VerticalInput);
 
-        TransformTranslate(horizontalInput, Vector3.right);
-        TransformTranslate(verticalInput, Vector3.up);
+        if (UseMouse)
+        {
+            horizontalInput = Input.GetAxis(ShipMovementInputsConst.MouseX);
+            verticalInput = Input.GetAxis(ShipMovementInputsConst.MouseY);
+        }
+
+        TransformTranslate(Vector3.right, horizontalInput);
+        TransformTranslate(Vector3.up, verticalInput);
 
         CheckPostion();
     }
@@ -59,40 +69,77 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(transform.position.x, ShipPositionsConst.LimitPositionY, 0);
         }
 
-        //Position wraps X left to right and vice versa
-        if (transform.position.x > ShipPositionsConst.WrapsPositionX)
+        if (UseMouse)
         {
-            transform.position = new Vector3(-ShipPositionsConst.WrapsPositionX, transform.position.y, 0);
+            // limits position X
+            if (transform.position.x > ShipPositionsConst.LimitPositionX)
+            {
+                transform.position = new Vector3(ShipPositionsConst.LimitPositionX, transform.position.y, 0);
+            }
+            else if (transform.position.x < -ShipPositionsConst.LimitPositionX)
+            {
+                transform.position = new Vector3(-ShipPositionsConst.LimitPositionX, transform.position.y, 0);
+            }
         }
-        else if (transform.position.x < -ShipPositionsConst.WrapsPositionX)
+        else
         {
-            transform.position = new Vector3(ShipPositionsConst.WrapsPositionX, transform.position.y, 0);
+            //Position wraps X left to right and vice versa
+            if (transform.position.x > ShipPositionsConst.WrapsPositionX)
+            {
+                transform.position = new Vector3(-ShipPositionsConst.WrapsPositionX, transform.position.y, 0);
+            }
+            else if (transform.position.x < -ShipPositionsConst.WrapsPositionX)
+            {
+                transform.position = new Vector3(ShipPositionsConst.WrapsPositionX, transform.position.y, 0);
+            }
         }
     }
     #endregion
 
     #region Shooting
+
+    public void PowerUpOn(string tagPowerUp)
+    {
+        switch (tagPowerUp)
+        {
+            case "TripleShot_PowerUp":
+                CanTripleShoot = true;
+                StartCoroutine(TripleShotPowerDownRoutine());
+                break;
+        }
+    }
     private void Shooting()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && Time.time > nextFire)
+        if (!UseMouse && Input.GetKeyDown(KeyCode.Space) || UseMouse && Input.GetMouseButtonDown(0))
         {
-            nextFire = Time.time + fireRate;
-            if (CanTripleShoot)
+            if (Time.time > nextFire)
             {
-                Instantiate(TripleShotPrefab, getPostion(transform.position), Quaternion.identity);
-            }
-            else
-            {
-
-                Instantiate(laserPrefab, getPostion(transform.position, y: LaserPositionConst.ShootDefaultPosY), Quaternion.identity);
+                nextFire = Time.time + fireRate;
+                if (CanTripleShoot)
+                {
+                    Instantiate(TripleShotPrefab, getPostion(transform.position), Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(laserPrefab, getPostion(transform.position, y: LaserPositionConst.ShootDefaultPosY), Quaternion.identity);
+                }
             }
         }
     }
+
     #endregion
 
     #region Helpers
-    private void TransformTranslate(float Input, Vector3 vector3)
+    IEnumerator TripleShotPowerDownRoutine()
     {
+        yield return new WaitForSeconds(PowerUpsConst.TripleShotsTimeEnd);
+
+        CanTripleShoot = false;
+    }
+
+    private void TransformTranslate(Vector3 vector3, float Input)
+    {
+
         transform.Translate(vector3 * speed * Input * Time.deltaTime);
     }
 
@@ -100,5 +147,7 @@ public class Player : MonoBehaviour
     {
         return position + new Vector3(x, y, z);
     }
+
+
     #endregion
 }
