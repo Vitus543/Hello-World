@@ -12,10 +12,14 @@ public class EnemyAI : MonoBehaviour
 
     public GameObject enemyExplosionPrefab;
 
+    private UIManager UIManager;
+
     // Start is called before the first frame update
     void Start()
     {
         transform.position = RandomPositionX();
+
+        UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     // Update is called once per frame
@@ -42,6 +46,7 @@ public class EnemyAI : MonoBehaviour
         }
         else if (collision.CompareTag("Shot"))
         {
+
             if (collision.transform.parent != null)
             {
                 Destroy(collision.transform.parent.gameObject);
@@ -50,11 +55,16 @@ public class EnemyAI : MonoBehaviour
             {
                 Destroy(collision.gameObject);
             }
+
+            if (UIManager != null)
+            {
+                UIManager.UpdateScore(EnemyConst.Score);
+            }
         }
 
         //Animation explosion
         Instantiate(enemyExplosionPrefab, transform.position, Quaternion.identity);
-        
+
         Destroy(this.gameObject);
     }
     #region helpers

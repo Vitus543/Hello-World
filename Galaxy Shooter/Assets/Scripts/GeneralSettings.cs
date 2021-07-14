@@ -20,7 +20,7 @@ public class ShipConst
 
     public const float DefaultShipSpeed = 5.0f;
 
-    public const int DefaultLifes = 2;
+    public const int DefaultLifes = 3;
 }
 
 public class LaserPositionConst
@@ -36,14 +36,21 @@ public class PowerUpsConst
     //PowerUp Triple Shot Time in seconds
     public const float TripleShotsTimeEnd = 5.0f;
 
+    //public const float SpawnTimeTripleShots = 10.0f;
+
     //PowerUp Speed Time in seconds
     public const float SpeedTimeEnd = 10.0f;
 
     //PowerUp Speed x1.5
     public const float SpeedMultiplier = 2.5f;
 
+    //public const float SpawnTimeSpeed = 7.5f;
+
     //PowerUp shield time for 5 seconds
     public const float ShieldTimeEnd = 5.0f;
+
+    public const float SpawnTime = 5.0f;
+
 }
 
 public class EnemyConst
@@ -55,6 +62,10 @@ public class EnemyConst
     public const float LimitPositionX = 7.20f;
 
     public const int DamageEnemyShip = 1;
+
+    public const float SpawnTime = 5.0f;
+
+    public const int Score = 10;
 }
 public enum PowerUps
 {

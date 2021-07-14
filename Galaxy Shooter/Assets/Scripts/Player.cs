@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     private float nextFire = 0.0f;
 
     [SerializeField]
-    private int Lifes = ShipConst.DefaultLifes;
+    private int lifes = ShipConst.DefaultLifes;
 
     [SerializeField]
     private float speed = ShipConst.DefaultShipSpeed;
@@ -36,11 +36,17 @@ public class Player : MonoBehaviour
     [SerializeField]
     private bool UseShieldPowerUp = false;
 
+    private UIManager UIManager;
+    private GameManager GameManager;
+    public SpawnManager SpawnManager;
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3();
+        UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        GameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        SpawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
     }
 
     // Update is called once per frame
@@ -71,6 +77,11 @@ public class Player : MonoBehaviour
 
     private void CheckPostion()
     {
+        // initialiation of shield
+        if (UseShieldPowerUp)
+        {
+            Instantiate(ShieldPrefab, getPostion(transform.position), Quaternion.identity);
+        }
         // limits position Y
         if (transform.position.y > 0)
         {
@@ -131,23 +142,38 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        if (!UseShieldPowerUp)
+        if (UseShieldPowerUp)
         {
-            Lifes -= EnemyConst.DamageEnemyShip;
+            UseShieldPowerUp = false;
+            return;
         }
-        if (Lifes < ShipConst.DefaultLifes)
+
+        lifes -= EnemyConst.DamageEnemyShip;
+
+        if (lifes > 0 && lifes < ShipConst.DefaultLifes)
         {
-            Instantiate(ShieldPrefab, getPostion(transform.position), Quaternion.identity);
             PowerUpOn(PowerUps.Shield);
         }
-        else if (Lifes < 0)
+        else if (lifes == 0)
         {
             //Animation explosion KATSU
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
+            if (GameManager != null && UIManager != null)
+            {
+                GameManager.GameOver = true;
+                UIManager.ShowTitleScreen();
+                SpawnManager.Stop=true;               
+            };
         }
+
+        if (UIManager != null)
+        {
+            UIManager.UpdateLives(lifes);
+        }
+
     }
-    
+
     private void Shooting()
     {
         if (!UseMouse && Input.GetKeyDown(KeyCode.Space) || UseMouse && Input.GetMouseButtonDown(0))
@@ -199,9 +225,9 @@ public class Player : MonoBehaviour
         {
             speed = ShipConst.DefaultShipSpeed;
         }
-        if (UseShieldPowerUp) 
+        if (UseShieldPowerUp)
         {
-           
+
         }
         transform.Translate(vector3 * speed * Input * Time.deltaTime);
     }
