@@ -38,7 +38,9 @@ public class Player : MonoBehaviour
 
     private UIManager UIManager;
     private GameManager GameManager;
-    public SpawnManager SpawnManager;
+    private SpawnManager SpawnManager;
+    private AudioSource audioSourcePlayer;
+    private ExplosionEffect explosionEffect;
 
     // Start is called before the first frame update
     void Start()
@@ -47,11 +49,14 @@ public class Player : MonoBehaviour
         UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         GameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         SpawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+
+        audioSourcePlayer = GetComponent<AudioSource>();
+        explosionEffect = explosionPrefab.GetComponent<ExplosionEffect>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
+
         Movement();
 
         Shooting();
@@ -158,12 +163,13 @@ public class Player : MonoBehaviour
         {
             //Animation explosion KATSU
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            explosionEffect.PlayAudioExplosion();
             Destroy(this.gameObject);
             if (GameManager != null && UIManager != null)
             {
                 GameManager.GameOver = true;
                 UIManager.ShowTitleScreen();
-                SpawnManager.Stop=true;               
+                SpawnManager.Stop = true;
             };
         }
 
@@ -180,6 +186,7 @@ public class Player : MonoBehaviour
         {
             if (Time.time > nextFire)
             {
+                audioSourcePlayer.Play();
                 nextFire = Time.time + fireRate;
                 if (UseTripleShotsPowerUp)
                 {

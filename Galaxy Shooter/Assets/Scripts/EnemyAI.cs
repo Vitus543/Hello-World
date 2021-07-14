@@ -11,8 +11,9 @@ public class EnemyAI : MonoBehaviour
     private float randomX = 0f;
 
     public GameObject enemyExplosionPrefab;
-
+    
     private UIManager UIManager;
+    private ExplosionEffect explosionEffect;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,8 @@ public class EnemyAI : MonoBehaviour
         transform.position = RandomPositionX();
 
         UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        explosionEffect = enemyExplosionPrefab.GetComponent<ExplosionEffect>();
+
     }
 
     // Update is called once per frame
@@ -62,6 +65,7 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
+        explosionEffect.PlayAudioExplosion();
         //Animation explosion
         Instantiate(enemyExplosionPrefab, transform.position, Quaternion.identity);
 
