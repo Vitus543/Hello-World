@@ -20,6 +20,10 @@ public class PowerUp : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector3.down * Speed * Time.deltaTime);
+        if (transform.position.y < -EnemyConst.LimitPositionY)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -35,7 +39,7 @@ public class PowerUp : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-    
+
     #region helpers
 
     private Vector3 RandomPositionX()
