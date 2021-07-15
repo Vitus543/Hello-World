@@ -11,6 +11,9 @@ public class PowerUp : MonoBehaviour
     private PowerUps PowerUpID;
     private float randomX;
 
+    [SerializeField]
+    private AudioClip audioClip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,8 +37,8 @@ public class PowerUp : MonoBehaviour
             if (shipPlayer != null)
             {
                 shipPlayer.PowerUpOn(PowerUpID);
+                AudioSource.PlayClipAtPoint(audioClip, Camera.main.transform.position,1f);
             }
-
             Destroy(this.gameObject);
         }
     }

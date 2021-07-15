@@ -13,7 +13,10 @@ public class EnemyAI : MonoBehaviour
     public GameObject enemyExplosionPrefab;
     
     private UIManager UIManager;
-    private ExplosionEffect explosionEffect;
+
+
+    [SerializeField]
+    private AudioClip audioClip;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +24,6 @@ public class EnemyAI : MonoBehaviour
         transform.position = RandomPositionX();
 
         UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        explosionEffect = enemyExplosionPrefab.GetComponent<ExplosionEffect>();
 
     }
 
@@ -65,7 +67,7 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        explosionEffect.PlayAudioExplosion();
+        AudioSource.PlayClipAtPoint(audioClip, Camera.main.transform.position, 1f);
         //Animation explosion
         Instantiate(enemyExplosionPrefab, transform.position, Quaternion.identity);
 

@@ -9,13 +9,20 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField]
     private GameObject[] PowerUpsPrefabs;
-    public bool Stop = false;
-    public void StartSpawnEnemysAndPowerUps() 
+
+    private GameManager gameManager;
+
+    private void Start()
     {
-        if (Stop)
-        {
-            Stop = false;
-        }
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        StartCoroutine(SpawnManagerRoutine(EnemyConst.SpawnTime));
+
+        StartCoroutine(SpawnPowerUp());
+    }
+
+    public void StartSpawnEnemysAndPowerUps()
+    {
         StartCoroutine(SpawnManagerRoutine(EnemyConst.SpawnTime));
 
         StartCoroutine(SpawnPowerUp());
@@ -23,12 +30,8 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnManagerRoutine(float time)
     {
-        while (!Stop)
+        while (gameManager.GameOver == false)
         {
-            if (Stop)
-            {
-                yield break;
-            }
             yield return new WaitForSeconds(time);
             Instantiate(EnemyShipsPrefabs);
         }
@@ -36,12 +39,8 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerUp()
     {
-        while (!Stop)
+        while (gameManager.GameOver == false)
         {
-            if (Stop) 
-            {
-                yield break;
-            }
             int randomPowerUp = Random.Range(0, 3);
             Instantiate(PowerUpsPrefabs[randomPowerUp]);
             yield return new WaitForSeconds(PowerUpsConst.SpawnTime);

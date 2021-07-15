@@ -28,7 +28,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject TripleShotPrefab;
     [SerializeField]
-    private GameObject ShieldPrefab;
+    private GameObject ShieldGameObject;
+    [SerializeField]
+    private GameObject[] EngineFailureGameObject;
+
     [SerializeField]
     private bool UseTripleShotsPowerUp = false;
     [SerializeField]
@@ -40,8 +43,11 @@ public class Player : MonoBehaviour
     private GameManager GameManager;
     private SpawnManager SpawnManager;
     private AudioSource audioSourcePlayer;
-    private ExplosionEffect explosionEffect;
 
+    [SerializeField]
+    private AudioClip audioClip;
+
+    private int? olderValueRandom = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -51,11 +57,16 @@ public class Player : MonoBehaviour
         SpawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
 
         audioSourcePlayer = GetComponent<AudioSource>();
-        explosionEffect = explosionPrefab.GetComponent<ExplosionEffect>();
+        for (var i = 0; i < EngineFailureGameObject.Length; i++)
+        {
+            EngineFailureGameObject[i].SetActive(false);
+        }
+        ShieldGameObject.SetActive(false);
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
 
         Movement();
 
@@ -85,7 +96,7 @@ public class Player : MonoBehaviour
         // initialiation of shield
         if (UseShieldPowerUp)
         {
-            Instantiate(ShieldPrefab, getPostion(transform.position), Quaternion.identity);
+            ShieldGameObject.SetActive(true);
         }
         // limits position Y
         if (transform.position.y > 0)
@@ -150,6 +161,7 @@ public class Player : MonoBehaviour
         if (UseShieldPowerUp)
         {
             UseShieldPowerUp = false;
+            ShieldGameObject.SetActive(false);
             return;
         }
 
@@ -157,19 +169,32 @@ public class Player : MonoBehaviour
 
         if (lifes > 0 && lifes < ShipConst.DefaultLifes)
         {
+            var engineFail = Random.Range(0, 2);
+            if (olderValueRandom == null)
+            {
+                olderValueRandom = engineFail;
+            }
+            else if (olderValueRandom == engineFail && olderValueRandom == 0)//1==1 OR 0==0
+            {
+                engineFail = 1;
+            }
+            else
+            {
+                engineFail = 0;
+            }
+            ActiveFailEngine(engineFail);
             PowerUpOn(PowerUps.Shield);
         }
         else if (lifes == 0)
         {
             //Animation explosion KATSU
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            explosionEffect.PlayAudioExplosion();
+            AudioSource.PlayClipAtPoint(audioClip, Camera.main.transform.position, 1f);
             Destroy(this.gameObject);
             if (GameManager != null && UIManager != null)
             {
                 GameManager.GameOver = true;
                 UIManager.ShowTitleScreen();
-                SpawnManager.Stop = true;
             };
         }
 
@@ -178,6 +203,11 @@ public class Player : MonoBehaviour
             UIManager.UpdateLives(lifes);
         }
 
+    }
+
+    private void ActiveFailEngine(int engineFail)
+    {
+        EngineFailureGameObject[engineFail].SetActive(true);
     }
 
     private void Shooting()

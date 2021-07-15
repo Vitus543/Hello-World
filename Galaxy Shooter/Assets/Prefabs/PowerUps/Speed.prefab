@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2237108185190846879}
   - component: {fileID: 2237108185190846872}
   - component: {fileID: 2237108185190846873}
+  - component: {fileID: 2343125954481078035}
   m_Layer: 0
   m_Name: Speed
   m_TagString: Untagged
@@ -98,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 3
   PowerUpID: 1
+  audioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
 --- !u!58 &2237108185190846873
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -114,3 +116,22 @@ CircleCollider2D:
   m_Offset: {x: 0.00000019868214, y: 0.16318658}
   serializedVersion: 2
   m_Radius: 1.0563518
+--- !u!95 &2343125954481078035
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2237108185190846874}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 21128a6d520de2a49b80822bb34bb48e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
