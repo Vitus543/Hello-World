@@ -20,20 +20,16 @@ public class PlayerAnimation : MonoBehaviour
             animator.SetBool("Turn_Left", true);
             animator.SetBool("Turn_Right", false);
         }
-        else if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow))
-        {
-            animator.SetBool("Turn_Left", false);
-        }
-
         //turn Right Animation
-        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+       else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             animator.SetBool("Turn_Right", true);
             animator.SetBool("Turn_Left", false);
         }
-        else if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow))
+        else if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.RightArrow)  || Input.GetKeyUp(KeyCode.LeftArrow))
         {
             animator.SetBool("Turn_Right", false);
-        }
+            animator.SetBool("Turn_Left", false);
+        }        
     }
 }

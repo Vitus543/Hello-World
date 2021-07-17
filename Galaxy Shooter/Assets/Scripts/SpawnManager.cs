@@ -16,23 +16,23 @@ public class SpawnManager : MonoBehaviour
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
-        StartCoroutine(SpawnManagerRoutine(EnemyConst.SpawnTime));
+        StartCoroutine(SpawnManagerRoutine());
 
         StartCoroutine(SpawnPowerUp());
     }
 
     public void StartSpawnEnemysAndPowerUps()
     {
-        StartCoroutine(SpawnManagerRoutine(EnemyConst.SpawnTime));
+        StartCoroutine(SpawnManagerRoutine());
 
         StartCoroutine(SpawnPowerUp());
     }
 
-    IEnumerator SpawnManagerRoutine(float time)
+    IEnumerator SpawnManagerRoutine()
     {
         while (gameManager.GameOver == false)
         {
-            yield return new WaitForSeconds(time);
+            yield return new WaitForSeconds(EnemyConst.SpawnTime);
             Instantiate(EnemyShipsPrefabs);
         }
     }

@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
             Instantiate(Player, Vector3.zero, Quaternion.identity);
             GameOver = false;
             uIManager.HideTitleScreen();
-
+            SpawnManager.StartSpawnEnemysAndPowerUps();
         }
     }
 }

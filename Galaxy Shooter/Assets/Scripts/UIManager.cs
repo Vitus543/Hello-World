@@ -38,6 +38,7 @@ public class UIManager : MonoBehaviour
         scoreText.enabled = true;
         livesImage.enabled = true;
         TitleScreen.SetActive(false);
+
     }
    
 }
