@@ -41,7 +41,6 @@ public class Player : MonoBehaviour
 
     private UIManager UIManager;
     private GameManager GameManager;
-    private SpawnManager SpawnManager;
     private AudioSource audioSourcePlayer;
 
     [SerializeField]
@@ -54,9 +53,9 @@ public class Player : MonoBehaviour
         transform.position = new Vector3();
         UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         GameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        SpawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
 
         audioSourcePlayer = GetComponent<AudioSource>();
+
         for (var i = 0; i < EngineFailureGameObject.Length; i++)
         {
             EngineFailureGameObject[i].SetActive(false);
@@ -93,11 +92,6 @@ public class Player : MonoBehaviour
 
     private void CheckPostion()
     {
-        // initialiation of shield
-        if (UseShieldPowerUp)
-        {
-            ShieldGameObject.SetActive(true);
-        }
         // limits position Y
         if (transform.position.y > 0)
         {
@@ -151,6 +145,7 @@ public class Player : MonoBehaviour
                 break;
             case PowerUps.Shield:
                 UseShieldPowerUp = true;
+                ShieldGameObject.SetActive(true);
                 StartCoroutine(PowerDownRoutine(PowerUpsConst.ShieldTimeEnd, PowerUps.Shield));
                 break;
         }
@@ -220,11 +215,11 @@ public class Player : MonoBehaviour
                 nextFire = Time.time + fireRate;
                 if (UseTripleShotsPowerUp)
                 {
-                    Instantiate(TripleShotPrefab, getPostion(transform.position), Quaternion.identity);
+                    Instantiate(TripleShotPrefab, GetPostion(transform.position), Quaternion.identity);
                 }
                 else
                 {
-                    Instantiate(laserPrefab, getPostion(transform.position, y: LaserPositionConst.ShootDefaultPosY), Quaternion.identity);
+                    Instantiate(laserPrefab, GetPostion(transform.position, y: LaserPositionConst.ShootDefaultPosY), Quaternion.identity);
                 }
             }
         }
@@ -241,13 +236,14 @@ public class Player : MonoBehaviour
         {
             case PowerUps.TripleShots:
                 UseTripleShotsPowerUp = false;
-                break;
+                yield break;
             case PowerUps.Speed:
                 UseSpeedPowerUp = false;
-                break;
+                yield break;
             case PowerUps.Shield:
                 UseShieldPowerUp = false;
-                break;
+                ShieldGameObject.SetActive(false);
+                yield break;
 
         }
     }
@@ -269,7 +265,7 @@ public class Player : MonoBehaviour
         transform.Translate(vector3 * speed * Input * Time.deltaTime);
     }
 
-    private Vector3 getPostion(Vector3 position, float x = 0, float y = 0, float z = 0)
+    private Vector3 GetPostion(Vector3 position, float x = 0, float y = 0, float z = 0)
     {
         return position + new Vector3(x, y, z);
     }

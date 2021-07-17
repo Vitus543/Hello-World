@@ -45,15 +45,15 @@ MonoBehaviour:
     overrideState: 0
     value: 1
   ldrLut:
-    overrideState: 0
+    overrideState: 1
     value: {fileID: 0}
     defaultState: 4
   ldrLutContribution:
     overrideState: 0
     value: 1
   temperature:
-    overrideState: 1
-    value: -22.5
+    overrideState: 0
+    value: 28
   tint:
     overrideState: 0
     value: -1
@@ -65,30 +65,30 @@ MonoBehaviour:
     value: -1
   saturation:
     overrideState: 1
-    value: 1.13
+    value: 0
   brightness:
-    overrideState: 0
+    overrideState: 1
     value: 0
   postExposure:
     overrideState: 1
-    value: 1.42
+    value: 1.24
   contrast:
     overrideState: 1
-    value: 0.75
+    value: 0
   mixerRedOutRedIn:
-    overrideState: 1
-    value: 100
+    overrideState: 0
+    value: 19
   mixerRedOutGreenIn:
     overrideState: 0
-    value: 0
+    value: 81
   mixerRedOutBlueIn:
     overrideState: 0
-    value: 0
+    value: -127
   mixerGreenOutRedIn:
     overrideState: 0
     value: 0
   mixerGreenOutGreenIn:
-    overrideState: 1
+    overrideState: 0
     value: 100
   mixerGreenOutBlueIn:
     overrideState: 0
@@ -100,11 +100,11 @@ MonoBehaviour:
     overrideState: 0
     value: 0
   mixerBlueOutBlueIn:
-    overrideState: 1
+    overrideState: 0
     value: 100
   lift:
     overrideState: 0
-    value: {x: 1, y: 1, z: 1, w: 0.10854817}
+    value: {x: 1, y: 1, z: 1, w: 0.054274086}
   gamma:
     overrideState: 0
     value: {x: 1, y: 1, z: 1, w: 0.35278153}
@@ -1329,35 +1329,35 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 8
+    value: 10
   threshold:
     overrideState: 1
-    value: 1.5
+    value: 1
   softKnee:
     overrideState: 1
-    value: 1
+    value: 0.5
   clamp:
     overrideState: 0
     value: 65472
   diffusion:
     overrideState: 0
-    value: 7
+    value: 7.1
   anamorphicRatio:
     overrideState: 0
-    value: 0
+    value: 0.16
   color:
     overrideState: 0
     value: {r: 1, g: 1, b: 1, a: 1}
   fastMode:
     overrideState: 0
-    value: 1
+    value: 0
   dirtTexture:
     overrideState: 0
-    value: {fileID: 0}
+    value: {fileID: 2800000, guid: 562e97a09d273471d8c6e9e7f9eb2143, type: 3}
     defaultState: 1
   dirtIntensity:
     overrideState: 0
-    value: 0
+    value: 1.05
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
